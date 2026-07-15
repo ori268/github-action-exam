@@ -1,18 +1,35 @@
-name: advanced event filters action workflow  
+name: env action workflow  
 
-on: 
-    push:  
-      paths:
-          - '**.js'
+on: push
+
+# workflow 레벨
+env:
+  DAY_OF_WEEK: Monday
+
 jobs:  
   
-  test:
+  greeting_job:
     runs-on: ubuntu-latest  
-    
-    steps:  
-      - name: Run Test  
-        run: |  
-          echo github.event_name: "${{ github.event_name }}" 
-          echo Run Test  
+    # job 레벨
+    env:
+      Greeting: Hello
+    steps: 
+        - name: Run greeting_job1  
+          # steps 레벨
+          env:
+              First_Name: Mona
+          if: ${{ env.DAY_OF_WEEK == 'Monday' }}    
+          run: |  
+              echo  greeting_job1 stpe LEVEL env : "$First_Name" , "${{env.First_Name}}"
+              echo  greeting_job1 job LEVEL env : "$Greeting" , "${{env.Greeting}}"
+              echo  greeting_job1 workflow LEVEL env : "$DAY_OF_WEEK" , "${{env.DAY_OF_WEEK}}" 
+
+        - name: Run greeting_job2 
+          env:
+              First_Name: Maya
+          run: |  
+              echo  greeting_job2 stpe LEVEL env : "$First_Name" , "${{env.First_Name}}"
+              echo  greeting_job2 job LEVEL env : "$Greeting" , "${{env.Greeting}}"
+              echo  greeting_job2 workflow LEVEL env : "$DAY_OF_WEEK" , "${{env.DAY_OF_WEEK}}" 
   
   
