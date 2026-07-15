@@ -1,14 +1,25 @@
-name: secrets env action workflow  
+name: Environments secrets env action workflow  
 on: push
-# workflow 레벨
-env:
-  USER_NAME: ${{ secrets.USER_NAME }}  
-  USER_PW:   ${{ secrets.USER_PW }} 
 jobs:  
-  secrets_env_variable:
+  test:
     runs-on: ubuntu-latest  
+    environment: testing 
+    env:
+        DB_NAME1:   ${{ secrets.DB_NAME }}  
+        DB_PORT1:   ${{ vars.DB_PORT }} 
     steps: 
-        - name: Run secrets env
+        - name: Run Environments secrets env
           run: |  
-              echo  USER_NAME = "${{env.USER_NAME}}"
-              echo  USER_PW   = "${{env.USER_PW}}"
+              echo testing DB_NAME =   "${{env.DB_NAME1}}"
+              echo testing DB_PORT =   "${{env.DB_PORT1}}"
+  prod:
+    runs-on: ubuntu-latest  
+    environment: prod 
+    env:
+        DB_NAME2:   ${{ secrets.DB_NAME }}  
+        DB_PORT2:   ${{ vars.DB_PORT }} 
+    steps: 
+        - name: Run Environments secrets env
+          run: |  
+              echo prod DB_NAME =   "${{env.DB_NAME2}}"
+              echo prod DB_PORT =   "${{env.DB_PORT2}}"
