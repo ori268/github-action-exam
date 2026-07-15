@@ -1,14 +1,30 @@
-name: advanced event action workflow  
-
-on: [push, pull_request, issues, fork, workflow_dispatch]  
-
+name: if action workflow  
+on: push  
 jobs:  
-  
   test:
-    runs-on: ubuntu-latest  
-    
+    runs-on: ubuntu-latest      
     steps:  
       - name: Run Test  
+        if: runner.os == 'Linux'
         run: |  
-          echo github.event_name: "${{ github.event_name }}" 
+          ls ${{ github.workspace }}  
           echo Run Test  
+  build: 
+    if: github.repository == 'ori268/github-action-exam' 
+    needs: test  
+    runs-on: ubuntu-latest  
+    steps:  
+      - name: Run Build  
+        run: |  
+          ls ${{ github.workspace }} 
+          echo Run Build  
+  deploy:  
+    needs: build  
+    runs-on: ubuntu-latest  
+    steps:
+      - name: Run Deploy1
+        id: run_deploy1         
+        run: echo Run Deploy1
+      - name: Run Deploy2 
+        if: steps.run_deploy1.outcome == 'success'
+        run: echo Run Deploy2
