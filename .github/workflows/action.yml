@@ -1,11 +1,14 @@
 name: advanced event filters action workflow  
+
 on: 
     push:  
-      branches:
-        - 'hotfix' 
+      paths:
+          - '**.js'
 jobs:  
+  
   test:
-    runs-on: ubuntu-latest      
+    runs-on: ubuntu-latest  
+    
     steps:  
       - name: Run Test  
         run: |  
